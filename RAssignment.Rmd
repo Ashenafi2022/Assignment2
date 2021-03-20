@@ -135,17 +135,42 @@ Check for missed values
 sum(teosinte_snp$Chromosome == "") 
 ```
 
+SNPs per chromosome
+```{r}
+library(ggplot2)
+ggplot(data = maize_snp) + geom_point(mapping=aes(x=Chromosome, y=Position))
+ggplot(data = teosinte_snp) + geom_point(mapping=aes(x=Chromosome, y=Position))
+```
 
- In progress
+In progress
 Subset data by chromosome, order in increasing position
 
+```{r}
 maize_chromosome1 <- subset(maize_snp, Chromosome==1)%>%arrange(Position)
+dim(maize_chromosome1)
+
 teosinte_chromosome1 <- subset(teosinte_snp, Chromosome==1)%>%arrange(Position)
-teosinte_chromosome2 <- subset(teosinte_snp, Chromosome==2)%>%arrange(teosinte_chromosome2$Position)
+dim(teosinte_chromosome1)
+
+teosinte_chromosome2 <- subset(teosinte_snp, Chromosome==2)%>%arrange(Position)
+dim(teosinte_chromosome2)
+```
 
 
 Subset each chromosome, order in position decreasing order, replace missed values
 
-maize_chromosome.dec1 <- subset(maize_snp, Chromosome==1)%>%arrange(desc(Position))
-teosinte_chromosome.dec1 <- subset(teosinte_snp, Chromosome==1)%>%arrange(desc(Position))
+Missing data and amount of heterozygosity
+
+
+
+
+
+
+
+
+
+
+
+
+
 
