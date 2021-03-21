@@ -3,69 +3,13 @@
 
 #..............data import from github repository...........
 library(dplyr)
-fang_genotypes <- read.table("C:/Data analysis/Bioinfo_spring2021/fang_et_al_genotypes.txt", header = FALSE)
+fang_genotypes1 <- ("https://raw.githubusercontent.com/EEOB-BioData/BCB546-Spring2021/master/assignments/UNIX_Assignment/fang_et_al_genotypes.txt")
+fang_genotypes <- read.table(fang_genotypes1, head = TRUE, sep="\t")
+dim(fang_genotypes) # 2782 observations/rows and 986 variables/columns
 
-  # fang_et_al>genotypes.txt
-fang_genotypesXXXX <- ("C:/Data analysis/Bioinfo_spring2021/fang_et_al_genotypes.txt")
-fangGeno <- read.table(fang_genotypesXXXX)
-dim(fangGeno) # 2782 rows/observations and 986 columns/variables
-glimpse(fangGeno)
-
-  # snp_position.txt
-snpXXXX <- ("C:/Data analysis/Bioinfo_spring2021/snp_position.txt")
-snpPos <- read.table(snpXXXX)
-dim(snpPos)
-glimpse(fangGeno)
-
-fang_genotypes111 <- ("https://github.com/EEOB-BioData/BCB546-Spring2021/blob/main/assignments/UNIX_Assignment/fang_et_al_genotypes.txt")
-fang_genotypes222 <- read_table(fang_genotypes111)
-dim(fang_genotypes222) # 851 X 1
-
-data111 <- ("https://github.com/EEOB-BioData/BCB546-Spring2021.git/fang_et_al_genotypes.txt")
-
-data111 <- ("https://github.com/Ashenafi2022/BCB546-Spring2021.git/fang_et_al_genotypes.txt")
-data222 <- read.table(data111)
-dim(data222)
-
-snp_position1 <- "https://github.com/EEOB-BioData/BCB546-Spring2021/blob/main/assignments/UNIX_Assignment/snp_position.txt"
-snp_position12 <- read.table(data111)
-dim(snp_position12)
-
-PATH <- "https://raw.githubusercontent.com/guru99-edu/R-Programming/master/travel_times.csv"
-df <- read.csv(PATH)
-glimpse(df)
-
-
-
-
-
-
-#Something is wrong with importing these 2 datasets from github
-fang_genotypes1 <- read_csv("https://github.com/EEOB-BioData/BCB546-Spring2021/blob/main/assignments/UNIX_Assignment/fang_et_al_genotypes.txt")
-dim(fang_genotypes1) # 851 X 1
-
-snp_position1 <- read_csv("https://github.com/EEOB-BioData/BCB546-Spring2021/blob/main/assignments/UNIX_Assignment/snp_position.txt")
-dim(snp_position1) # 4809 X 1
-
-
-
-
-#..............data import...........
-
-# Installing
-install.packages("readr")
-# Loading
-library("readr")
-fang_genotypes <- read_tsv(file.choose())
-str(fang_genotypes)
-dim(fang_genotypes) # 2782 rows/observations and 986 columns/variables
-
-snp_position <- read_tsv(file.choose())
-class(snp_position)
-str(snp_position) 
-dim(snp_position) # 983 rows/observations and  15 columns/variables
-head(snp_position) 
-
+snp_position1 <- ("https://raw.githubusercontent.com/EEOB-BioData/BCB546-Spring2021/master/assignments/UNIX_Assignment/snp_position.txt")
+snp_position <- read.table(snp_position1, head = TRUE, sep="\t")
+dim(snp_position) # 983 observations or rows and 15 variables or columns
 
 # Select SNP_ID, chromosome and Position from SNP_position data set
 snp_position.selected <- select(snp_position, c("SNP_ID", "Chromosome", "Position"))
