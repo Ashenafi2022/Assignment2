@@ -1,0 +1,32 @@
+---
+title: "Zdyrski_review"
+author: "Christopher_Zdyrski"
+date: "3/21/2021"
+output: html_document
+---
+
+## R Markdown
+
+Your first install steps are not in " ``` " add these so it looks like this
+```{r}
+library(readr)
+fang_genotypes <- read.table("C:/Data analysis/Bioinfo_spring2021/fang_et_al_genotypes.txt", header = T)
+dim(fang_genotypes) 
+```
+
+You have the librayr install of readr twice, I believe once the library is loaded it is ok to not load it again
+
+You can not have the file read in from a location on your computer, this does not allow me or anyone else to do it. you should use a command like the one below to read in from the public repository
+
+fang_et_al_genotypes <- read.table('https://raw.githubusercontent.com/EEOB-BioData/BCB546-Spring2021/main/assignments/UNIX_Assignment/fang_et_al_genotypes.txt', header=TRUE, sep="\t",stringsAsFactors = FALSE)
+
+You can filter by ZMM as it is common to all three files, up to you (instead of 'ZMMIL' | Group == 'ZMMLR' | Group == 'ZMMMR'))
+
+For your snp plot I would get rid of all the y axis labels as it takes up a lot of space and are unreadable I used this
+
+ggplot(maize_joined_plot_numeric) +
+  geom_point(aes(Chromosome, Position)) +
+  theme(axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
+
+Can not check the other plot as the code is not made yet, good luck!
