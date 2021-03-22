@@ -40,10 +40,6 @@ table(as.factor(fang_genotypes$Group))
 summary(as.factor(snp_position$Chromosome))
   # chrosome 1 = 155, 2 =127, 3=107, 4=91, 5=122,  6=76, 7=97, 8=62, 9=60, 10=53, multiple=6, unknown=27 
 
-# change the variable "Group" to a factor
-fang_genotypes.selected$Group <- as.factor(fang_genotypes.selected$Group)
-levels(fang_genotypes.selected$Group)
-
 #Subset data 3 maize genotypes > transpose > merge with snp data
 maize_genotypes <- filter(fang_genotypes, Group == 'ZMMIL' | Group == 'ZMMLR' | Group == 'ZMMMR')
 dim(maize_genotypes) # 1573 rows/observations  986 columns/variables
@@ -121,7 +117,35 @@ sapply(teosinte_snp, Position, min)
 sapply(teosinte_snp$Position, min)
 
 
+# Homozygous and heterozygous
+# Four catageroies: homozygous, hetrozygous, missed, and NA (e.g. A/C, G/T)
 
+# Gene1 = ZDP_0752a
+ZDP_0752a <- transmute(maize_snp, nucleotides =case_when( 
+              ZDP_0752a %in% c('A/A', 'C/C', 'G/G', 'T/T')~"homozygous",
+              ZDP_0752a %in% c('A/T', 'C/G', 'G/C', 'T/A') ~"hetrozygous",
+              ZDP_0752a %in% '?/?' ~ "Missed"))
+table(ZDP_0752a)
+# hetrozygous  homozygous      Missed 
+#     36         793          22 
+
+ggplot(ZDP_0752a, aes(nucleotides)) +
+  geom_bar(fill="#0073C2FF") 
+  
+ggplot(ZDP_0752a)+ geom_point(mapping=aes(ZDP_0752a))
+hist(as.numeric(ZDP_0752a$nucleotides)) + labs (title="Gene 1 - ZDP_0752a")
+
+#Gene2 = ZDP_0793a
+ZDP_0793a <- transmute(maize_snp, nucleotides =case_when( 
+                  ZDP_0793a %in% c('A/A', 'C/C', 'G/G', 'T/T')~"homozygous",
+                  ZDP_0793a %in% c('A/T', 'C/G', 'G/C', 'T/A') ~"hetrozygous",
+                  ZDP_0752a %in% '?/?' ~ "Missed"))
+table(ZDP_0793a)
+# hetrozygous  homozygous      Missed 
+#   46         723           7 
+
+ggplot(ZDP_0793a, aes(nucleotides)) +
+  geom_bar(fill="#0073C2FF") + labs (title="Gene 2 - ZDP_0793a")
 
 
 
