@@ -1,0 +1,13 @@
+title: "R_Assignment Review"
+author: "Kavi R. Acharya"
+date: "March 22, 2021"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+  
+I think we need to make separate files for codes in a markdown files and readme with the description.
+Code on part 1 seems fine but make sure you give the direction for your files in the Rmarkdown file itself. 
+I see some of the coding is in progress for part 2. 
+Please do not forget about the output files, all 40 of them. 
+Good luck. 
