@@ -2,52 +2,42 @@
 title: "Assignment2"
 author: "Ashenafi Beyi"
 date: "3/19/2021"
-output: html_document
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
 ---
-Installing
 
+STEP 1. Importa data sets 
 
-Loading
-
-```[r]
-library("readr")
-```
-Import genotype data set
-install readr
-
-install.packages("readr")
-
-
+Import genotypes and snp_positions data from repository
 ```{r}
-library(readr)
-fang_genotypes <- read.table("C:/Data analysis/Bioinfo_spring2021/fang_et_al_genotypes.txt", header = T)
+fang_genotypes <- read.table("https://raw.githubusercontent.com/EEOB-BioData/BCB546-Spring2021/master/assignments/UNIX_Assignment/fang_et_al_genotypes.txt",
+                              header=T, sep="\t", stringsAsFactors =F)
 dim(fang_genotypes) 
-```
-2782 rows/observations and 986 columns/variables
 
-Import snp_position data set
-```{r}
-library(readr)
-snp_position <- read_tsv("C:/Data analysis/Bioinfo_spring2021/snp_position.txt")
-class(snp_position)
-str(snp_position) 
-dim(snp_position) # 983 rows/observations and  15 columns/variables
+snp_position <- read.table("https://raw.githubusercontent.com/EEOB-BioData/BCB546-Spring2021/master/assignments/UNIX_Assignment/snp_position.txt",
+                  header=T, sep="\t", stringsAsFactors =F)
+dim(snp_position) 
 head(snp_position) 
 ```
+Summary
+> fang_genotypes has 2782 observations/rows and 986 variables/columns
+> snp_position has 983 observations or rows and 15 variables or columns
 
 
-Data processing
-
+STEP 2. Data processing
 
 install.packages("dplyr")
 
-
 ```{r}
+library("tidyverse")
 library(dplyr)
 snp_position.selected <- select(snp_position, c("SNP_ID", "Chromosome", "Position"))
 str(snp_position.selected) # 983 rows and 3 columns
 glimpse(snp_position.selected) # similar function with str
 ```
+
 
 Number of rows and columns
 ```{r}
@@ -56,6 +46,7 @@ ncol(fang_genotypes) # 986
 NROW(na.omit(fang_genotypes)) # 2782
 NCOL(na.omit(fang_genotypes)) # 986
 ```
+
 
 Genotypes in the column Group, summary and table functions can be used alike.
 ```{r}
@@ -79,9 +70,10 @@ levels(as.factor(maize_genotypes$Group)) # "ZMMIL" "ZMMLR" "ZMMMR"
 summary(as.factor(maize_genotypes$Group)) # ZMMIL = 290, ZMMLR = 1256, ZMMMR = 27 
 ```
 
+      
       #Transpose
 
-resource: reading: https://tibble.tidyverse.org/reference/rownames.html
+resource for reading: https://tibble.tidyverse.org/reference/rownames.html
 
 ```{r}
 library(tidyverse)
@@ -102,6 +94,7 @@ Check for missed chromosome
 sum(maize_snp$Chromosome == "") # 0
 ```
 
+
 Subset data 3 teosinte genotypes > transpose > merge with snp data
 ```{r}
 teosinte_genotypes <- filter(fang_genotypes, Group == 'ZMPBA' | Group == 'ZMPIL' | Group == 'ZMPJA')
@@ -109,6 +102,7 @@ dim(teosinte_genotypes) # 975 rows/observations and 986 columns/variables
 levels(as.factor(teosinte_genotypes$Group)) # "ZMPBA" "ZMPIL" "ZMPJA"
 summary(as.factor(teosinte_genotypes$Group)) # ZMPBA = 900, ZMPIL = 41, ZMPJA = 34
 ```
+
 
 Transpose
 
@@ -128,39 +122,222 @@ dim(teosinte_snp) # 983 528
 ```
 The merged dataset has 983 rows/observations and 528 columns/variables.
 
+
 check missed values in chromosome
-```
+
 Check for missed values
 ```{r}
 sum(teosinte_snp$Chromosome == "") 
 ```
 
-SNPs per chromosome
+
+STEP 3. Subset joined data set by 'Chromosome'
+  Order them by 'position'and replace missed value by "?" or "-"
+
+
+ Subset data by chromosome, order in INCREASING by "position" and replace missed values in columns 4 to 978 by "?"
+
+ 
+ Maize genotypes
+```{r}
+maize_chromosome.incr1 <- subset(maize_snp, Chromosome==1)%>%arrange(Position)%>%
+  mutate_at(4:978, ~replace(., is.na(.), "?"))
+maize_chromosome.incr2 <- subset(maize_snp, Chromosome==2)%>%arrange(Position)%>%
+  mutate_at(4:978, ~replace(., is.na(.), "?"))
+maize_chromosome.incr3 <- subset(maize_snp, Chromosome==3)%>%arrange(Position)%>%
+  mutate_at(4:978, ~replace(., is.na(.), "?"))
+maize_chromosome.incr4 <- subset(maize_snp, Chromosome==4)%>%arrange(Position)%>%
+  mutate_at(4:978, ~replace(., is.na(.), "?"))
+maize_chromosome.incr5 <- subset(maize_snp, Chromosome==5)%>%arrange(Position)%>%
+  mutate_at(4:978, ~replace(., is.na(.), "?"))
+maize_chromosome.incr6 <- subset(maize_snp, Chromosome==6)%>%arrange(Position)%>%
+  mutate_at(4:978, ~replace(., is.na(.), "?"))
+maize_chromosome.incr7 <- subset(maize_snp, Chromosome==7)%>%arrange(Position)%>%
+  mutate_at(4:978, ~replace(., is.na(.), "?"))
+maize_chromosome.incr8 <- subset(maize_snp, Chromosome==8)%>%arrange(Position)%>%
+  mutate_at(4:978, ~replace(., is.na(.), "?"))
+maize_chromosome.incr9 <- subset(maize_snp, Chromosome==9)%>%arrange(Position)%>%
+  mutate_at(4:978, ~replace(., is.na(.), "?"))
+maize_chromosome.incr10 <- subset(maize_snp, Chromosome==10)%>%arrange(Position)%>%
+  mutate_at(4:978, ~replace(., is.na(.), "?"))
+```
+
+Teosinte genotypes
+
+```{r}
+teosinte_chromosome.incr1 <- subset(teosinte_snp, Chromosome==1)%>%arrange(Position) %>% 
+  mutate_at(4:978, ~replace(., is.na(.), "?"))
+teosinte_chromosome.incr2 <- subset(teosinte_snp, Chromosome==2)%>%arrange(Position) %>% 
+  mutate_at(4:978, ~replace(., is.na(.), "?"))
+teosinte_chromosome.incr3 <- subset(teosinte_snp, Chromosome==3)%>%arrange(Position) %>% 
+  mutate_at(4:978, ~replace(., is.na(.), "?"))
+teosinte_chromosome.incr4 <- subset(teosinte_snp, Chromosome==4)%>%arrange(Position) %>% 
+  mutate_at(4:978, ~replace(., is.na(.), "?"))
+teosinte_chromosome.incr5 <- subset(teosinte_snp, Chromosome==5)%>%arrange(Position) %>% 
+  mutate_at(4:978, ~replace(., is.na(.), "?"))
+teosinte_chromosome.incr6 <- subset(teosinte_snp, Chromosome==6)%>%arrange(Position) %>% 
+  mutate_at(4:978, ~replace(., is.na(.), "?"))
+teosinte_chromosome.incr7 <- subset(teosinte_snp, Chromosome==7)%>%arrange(Position) %>% 
+  mutate_at(4:978, ~replace(., is.na(.), "?"))
+teosinte_chromosome.incr8 <- subset(teosinte_snp, Chromosome==8)%>%arrange(Position) %>% 
+  mutate_at(4:978, ~replace(., is.na(.), "?"))
+teosinte_chromosome.incr9 <- subset(teosinte_snp, Chromosome==9)%>%arrange(Position) %>% 
+  mutate_at(4:978, ~replace(., is.na(.), "?"))
+teosinte_chromosome.incr10 <- subset(teosinte_snp, Chromosome==10)%>%arrange(Position) %>% 
+  mutate_at(4:978, ~replace(., is.na(.), "?"))
+```
+
+
+Subset data by chromosome, order in DECREASING by "position" and replace missed values in columns 4 to 978 by "-"
+
+Maize genotypes
+
+```{r}
+maize_chromosome.dec1 <- subset(maize_snp, Chromosome==1)%>%arrange(desc(Position))%>%
+  mutate_at(4:978, ~replace(., is.na(.), "-"))
+maize_chromosome.dec2 <- subset(maize_snp, Chromosome==2)%>%arrange(desc(Position))%>%
+  mutate_at(4:978, ~replace(., is.na(.), "-"))
+maize_chromosome.dec3 <- subset(maize_snp, Chromosome==3)%>%arrange(desc(Position))%>%
+  mutate_at(4:978, ~replace(., is.na(.), "-"))
+maize_chromosome.dec4 <- subset(maize_snp, Chromosome==4)%>%arrange(desc(Position))%>%
+  mutate_at(4:978, ~replace(., is.na(.), "-"))
+maize_chromosome.dec5 <- subset(maize_snp, Chromosome==5)%>%arrange(desc(Position))%>%
+  mutate_at(4:978, ~replace(., is.na(.), "-"))
+maize_chromosome.dec6 <- subset(maize_snp, Chromosome==6)%>%arrange(desc(Position))%>%
+  mutate_at(4:978, ~replace(., is.na(.), "-"))
+maize_chromosome.dec7 <- subset(maize_snp, Chromosome==7)%>%arrange(desc(Position))%>%
+  mutate_at(4:978, ~replace(., is.na(.), "-"))
+maize_chromosome.dec8 <- subset(maize_snp, Chromosome==8)%>%arrange(desc(Position))%>%
+  mutate_at(4:978, ~replace(., is.na(.), "-"))
+maize_chromosome.dec9 <- subset(maize_snp, Chromosome==9)%>%arrange(desc(Position))%>%
+  mutate_at(4:978, ~replace(., is.na(.), "-"))
+maize_chromosome.dec10 <- subset(maize_snp, Chromosome==10)%>%arrange(desc(Position))%>%
+  mutate_at(4:978, ~replace(., is.na(.), "-"))
+```
+
+Teosinte genotypes
+
+```{r}
+teosinte_chromosome.dec1 <- subset(teosinte_snp, Chromosome==1)%>%arrange(desc(Position))%>%
+  mutate_at(4:978, ~replace(., is.na(.), "-"))
+teosinte_chromosome.dec2 <- subset(teosinte_snp, Chromosome==2)%>%arrange(desc(Position))%>%
+  mutate_at(4:978, ~replace(., is.na(.), "-"))
+teosinte_chromosome.dec3 <- subset(teosinte_snp, Chromosome==3)%>%arrange(desc(Position))%>%
+  mutate_at(4:978, ~replace(., is.na(.), "-"))
+teosinte_chromosome.dec4 <- subset(teosinte_snp, Chromosome==4)%>%arrange(desc(Position))%>%
+  mutate_at(4:978, ~replace(., is.na(.), "-"))
+teosinte_chromosome.dec5 <- subset(teosinte_snp, Chromosome==5)%>%arrange(desc(Position))%>%
+  mutate_at(4:978, ~replace(., is.na(.), "-"))
+teosinte_chromosome.dec6 <- subset(teosinte_snp, Chromosome==6)%>%arrange(desc(Position))%>%
+  mutate_at(4:978, ~replace(., is.na(.), "-"))
+teosinte_chromosome.dec7 <- subset(teosinte_snp, Chromosome==7)%>%arrange(desc(Position))%>%
+  mutate_at(4:978, ~replace(., is.na(.), "-"))
+teosinte_chromosome.dec8 <- subset(teosinte_snp, Chromosome==8)%>%arrange(desc(Position))%>%
+  mutate_at(4:978, ~replace(., is.na(.), "-"))
+teosinte_chromosome.dec9 <- subset(teosinte_snp, Chromosome==9)%>%arrange(desc(Position))%>%
+  mutate_at(4:978, ~replace(., is.na(.), "-"))
+teosinte_chromosome.dec10 <- subset(teosinte_snp, Chromosome==10)%>%arrange(desc(Position))%>%
+  mutate_at(4:978, ~replace(., is.na(.), "-"))
+```
+
+
+Step 4. Data vizualization
+
+1. Bar charts for SNPs per chromosome in maize and teosinte genotypes
+
 ```{r}
 library(ggplot2)
-ggplot(data = maize_snp) + geom_point(mapping=aes(x=Chromosome, y=Position))
-ggplot(data = teosinte_snp) + geom_point(mapping=aes(x=Chromosome, y=Position))
+maize_snp_bar <- ggplot(data = maize_snp) + geom_point(mapping=aes(x=Chromosome, y=Position)) +
+                    ggtitle("SNP distribution in Chromosome - Maize genotypes")
+maize_snp_bar + theme(plot.title = element_text(color = "green", size = 12, face = "bold", hjust = 0.5))
+teosinte_snp_bar <- ggplot(data = teosinte_snp) + geom_point(mapping=aes(x=Chromosome, y=Position)) +
+    ggtitle("SNP distribution in Chromosome - Teosinte genotypes")
+teosinte_snp_bar + theme(plot.title = element_text(color = "green", size = 12, face = "bold", hjust = 0.5))
 ```
 
-In progress
-Subset data by chromosome, order in increasing position
+2. Bar charts showing homozygous and heterozygous distribution in selected genes
+ Four catageroies: homozygous, hetrozygous, missed, and NA (e.g. A/C, G/T)
 
+ Gene1 = ZDP_0752a
 ```{r}
-maize_chromosome1 <- subset(maize_snp, Chromosome==1)%>%arrange(Position)
-dim(maize_chromosome1)
+library(tidyr)
+library(tidyverse)
+```
+Gene1 = ZDP_0752a
+```{r}
+ZDP_0752a <- transmute(maize_snp, nucleotides =case_when( 
+  ZDP_0752a %in% c('A/A', 'C/C', 'G/G', 'T/T')~"homozygous",
+  ZDP_0752a %in% c('A/T', 'C/G', 'G/C', 'T/A') ~"hetrozygous",
+  ZDP_0752a %in% '?/?' ~ "Missed"))
+table(ZDP_0752a)
+# hetrozygous  homozygous      Missed 
+#     36         793          22 
+Gene1 <- ggplot(ZDP_0752a, aes(nucleotides)) + geom_bar(fill="#0073C2FF") +
+            ggtitle ("Gene 1 - ZDP_0752a")
+Gene1 + theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5))
+```
 
-teosinte_chromosome1 <- subset(teosinte_snp, Chromosome==1)%>%arrange(Position)
-dim(teosinte_chromosome1)
+Gene2 = ZDP_0793a
+```{r}
+ZDP_0793a <- transmute(maize_snp, nucleotides =case_when( 
+  ZDP_0793a %in% c('A/A', 'C/C', 'G/G', 'T/T')~"homozygous",
+  ZDP_0793a %in% c('A/T', 'C/G', 'G/C', 'T/A') ~"hetrozygous",
+  ZDP_0752a %in% '?/?' ~ "Missed"))
+table(ZDP_0793a)
+# hetrozygous  homozygous      Missed 
+#   46         723              7 
 
-teosinte_chromosome2 <- subset(teosinte_snp, Chromosome==2)%>%arrange(Position)
-dim(teosinte_chromosome2)
+Gene2 <- ggplot(ZDP_0793a, aes(nucleotides)) + geom_bar(fill="#0073C2FF") + 
+           ggtitle("Gene 2 - ZDP_0793a")
+Gene2 + theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5))
 ```
 
 
-Subset each chromosome, order in position decreasing order, replace missed values
+3. bar charts of chromosome counts and SNP distributions in the entire fang_genotypes file
+```{r}
+fang_genotypes1 <- column_to_rownames(fang_genotypes, var = "Sample_ID")
+fang_genotypes.tr <- t(fang_genotypes1)%>%as.data.frame()%>%rownames_to_column(., var = "SNP_ID")
+fang_genotypes.tr <- fang_genotypes.tr[3:nrow(maize_genotypes.tr),]
 
-Missing data and amount of heterozygosity
+joined_snp_genotypes <- merge(snp_position, fang_genotypes.tr, by= "SNP_ID")
+```
 
+Bar chart of Chromosome frequencies
+```{r}
+chromosome_count <- ggplot(joined_snp_genotypes, aes(x= Chromosome) ) + 
+  geom_histogram(stat= "Count", color = "blue", fill = "blue") + ggtitle ("Number of SNPs per chromosome")
+
+chromosome_count + theme(plot.title = element_text(color = "red", size = 12, face = "bold", hjust = 0.5))
+```
+
+Bar chart of SNP distribution across chromosomes
+```{r}
+chromosome_snp <- ggplot(joined_snp_genotypes, aes(x= Chromosome, y= Position))+ 
+  geom_point(stat=, color = "red", alpha= 0.01)+ ggtitle ("SNPs distribution per chromosome")
+
+chromosome_snp + theme(plot.title = element_text(color = "red", size = 12, face = "bold", hjust = 0.5))
+```
+
+         
+         Summary of the work flows and what has been done
+##############################################################################
+
+1. Two data sets were imported from the course repository
+
+2. Data processing was conducted:
+       i. Data size and structure were explored.
+       ii. Three target variables selected in SNP_position data set.
+       iii. Target maize and teosinte genotypes were filtered, and transposed and merged with SNP_position data set.
+
+3. The merged SNP position and genotypes were subset by chromosome, order by "Position", and missed values replaced by "?" or "-" for maize and teosinte genotypes separately.
+
+4. Data vizualization
+      i. Chromosome counts and SNP distribution in maize and teosinte genotypes files
+      ii. Two genes were selected for data vizualization exercise
+          a. The selected gene was catagorized into "homozygous", "hetrozygous" and "missed"
+          b. Bar chart showing nucleotide distribution was plotted.
+      iii. The entire genotype data set was merged with snp position data.
+           Bar charts depcting chromosome ferquencies and snp distribution across the chromsomes were plotted.
 
 
 
